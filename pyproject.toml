@@ -14,6 +14,9 @@ license = "MIT"
 requires-python = ">=3.8"
 dependencies = []
 
+[project.scripts]
+pytr = "pytr.__main__:main"
+
 [project.urls]
 Homepage = "https://github.com/SoerenFox/pytr-Modified-"
 
