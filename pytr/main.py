@@ -333,6 +333,35 @@ def get_main_parser():
     parser_price_for_order.add_argument("exchange", help="Exchange id")
     parser_price_for_order.add_argument("order_type", help="Order type (buy/sell)")
 
+    # Limit order
+    parser_limit_order = parser_cmd.add_parser(
+        "limit_order",
+        formatter_class=formatter,
+        parents=[parser_login_args],
+        help="Place a limit order",
+        description="Place a limit order",
+    )
+    parser_limit_order.add_argument("isin", help="ISIN of instrument")
+    parser_limit_order.add_argument("exchange", help="Exchange id")
+    parser_limit_order.add_argument("order_type", help="Order type (buy/sell)")
+    parser_limit_order.add_argument("size", help="Order size", type=float)
+    parser_limit_order.add_argument("limit", help="Limit price", type=float)
+    parser_limit_order.add_argument(
+        "--expiry",
+        help="Expiry type (e.g. gtc, gfd, gtd)",
+        default="gfd",
+    )
+    parser_limit_order.add_argument(
+        "--expiry-date",
+        help="Expiry date for gtd (YYYY-MM-DD)",
+        default=None,
+    )
+    parser_limit_order.add_argument(
+        "--warnings-shown",
+        help="Optional comma separated list of warningsShown",
+        default=None,
+    )
+
     info = "Show news for an ISIN"
     parser_news = parser_cmd.add_parser(
         "news",
@@ -342,6 +371,17 @@ def get_main_parser():
         description=info,
     )
     parser_news.add_argument("isin", help="ISIN of instrument")
+
+    # Cancel order
+    parser_cancel_order = parser_cmd.add_parser(
+        "cancel_order",
+        formatter_class=formatter,
+        parents=[parser_login_args],
+        help="Cancel an order",
+        description="Cancel an existing order by id",
+    )
+    parser_cancel_order.add_argument("order_id", help="Order id to cancel")
+
     
     # get_price_alarms
     info = "Get current price alarms"
@@ -602,6 +642,32 @@ def main():
         try:
             tr = login(phone_no=args.phone_no, pin=args.pin, web=not args.applogin, store_credentials=args.store_credentials)
             res = tr.blocking_price_for_order(args.isin, args.exchange, args.order_type)
+            print(json.dumps(res, indent=2, ensure_ascii=False))
+        except ValueError as e:
+            print(e)
+            return -1
+    elif args.command == "limit_order":
+        try:
+            tr = login(phone_no=args.phone_no, pin=args.pin, web=not args.applogin, store_credentials=args.store_credentials)
+            warnings = args.warnings_shown.split(",") if args.warnings_shown else None
+            res = tr.blocking_limit_order(
+                args.isin,
+                args.exchange,
+                args.order_type,
+                args.size,
+                args.limit,
+                args.expiry,
+                expiry_date=args.expiry_date,
+                warnings_shown=warnings,
+            )
+            print(json.dumps(res, indent=2, ensure_ascii=False))
+        except ValueError as e:
+            print(e)
+            return -1
+    elif args.command == "cancel_order":
+        try:
+            tr = login(phone_no=args.phone_no, pin=args.pin, web=not args.applogin, store_credentials=args.store_credentials)
+            res = tr.blocking_cancel_order(args.order_id)
             print(json.dumps(res, indent=2, ensure_ascii=False))
         except ValueError as e:
             print(e)
