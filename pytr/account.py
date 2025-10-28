@@ -18,7 +18,7 @@ def get_settings(tr):
         return formatted_json
 
 
-def login(phone_no=None, pin=None, web=True, store_credentials=False):
+def login(phone_no=None, pin=None, web=True, store_credentials=True):
     """
     If web is true, use web login method, else simulate app login.
     Handle credentials parameters and store to credentials file if requested.
