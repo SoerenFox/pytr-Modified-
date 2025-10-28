@@ -19,7 +19,6 @@ from pytr.event import Event
 from pytr.portfolio import Portfolio
 from pytr.transactions import SUPPORTED_LANGUAGES, TransactionExporter
 from pytr.utils import check_version, get_logger
-from pytr.api import TradeRepublicError
 
 
 def get_main_parser():
@@ -651,50 +650,17 @@ def main():
         try:
             tr = login(phone_no=args.phone_no, pin=args.pin, web=not args.applogin, store_credentials=args.store_credentials)
             warnings = args.warnings_shown.split(",") if args.warnings_shown else None
-            try:
-                res = tr.blocking_limit_order(
-                    args.isin,
-                    args.exchange,
-                    args.order_type,
-                    args.size,
-                    args.limit,
-                    args.expiry,
-                    expiry_date=args.expiry_date,
-                    warnings_shown=warnings,
-                )
-            except TradeRepublicError as e:
-                # Try to extract necessary warnings from the error payload and retry once
-                err = getattr(e, "error", {}) or {}
-                necessary = None
-                if isinstance(err, dict):
-                    necessary = (
-                        err.get("details", {}).get("necessaryWarnings")
-                        or err.get("error", {}).get("details", {}).get("necessaryWarnings")
-                        or err.get("necessaryWarnings")
-                        or err.get("error", {}).get("necessaryWarnings")
-                    )
-                # If we found necessary warnings and user didn't explicitly pass any, retry with them
-                if necessary and not warnings:
-                    warnings = necessary
-                    res = tr.blocking_limit_order(
-                        args.isin,
-                        args.exchange,
-                        args.order_type,
-                        args.size,
-                        args.limit,
-                        args.expiry,
-                        expiry_date=args.expiry_date,
-                        warnings_shown=warnings,
-                    )
-                else:
-                    # Re-raise so outer handler prints details
-                    raise
-
+            res = tr.blocking_limit_order(
+                args.isin,
+                args.exchange,
+                args.order_type,
+                args.size,
+                args.limit,
+                args.expiry,
+                expiry_date=args.expiry_date,
+                warnings_shown=warnings,
+            )
             print(json.dumps(res, indent=2, ensure_ascii=False))
-        except TradeRepublicError as e:
-            # Print the error payload returned by the API
-            print(json.dumps(getattr(e, 'error', str(e)), indent=2, ensure_ascii=False))
-            return -1
         except ValueError as e:
             print(e)
             return -1
