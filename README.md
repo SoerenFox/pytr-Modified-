@@ -1,7 +1,5 @@
-# pytr-Modified-
-
-pytr-Modified- is an adjusted version of the original pytr API wrapper.  
-It adds helper functions, improves module organization, and returns clean JSON data without formatted console output.
+# pytr (Modified)
+This is a very slightly reengineered version of the [pytr](https://github.com/pytr-org/pytr) and [py_tr](https://github.com/nborrmann/pytr) API with added functions and improved modules.
 
 ## Installation
 
@@ -14,20 +12,11 @@ If the command `pytr` is not recognized after installation, add this to your PAT
 
 ## Usage
 
-```python
-import pytr
-
-client = pytr.Client()
-data = client.get_positions()
-print(data)
-```
-
-## Development
+Easily accessable through the terminal. For further information make use of the commands below or the original reposities.
 
 ```bash
-git clone https://github.com/SoerenFox/pytr-Modified-.git
-cd pytr-Modified-
-pip install -e .
+pytr 
+pytr command_name --help
 ```
 
 ## License
