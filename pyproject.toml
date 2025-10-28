@@ -10,11 +10,13 @@ authors = [
     { name = "Sören Fox", email = "soeren.0211@gmail.com" }
 ]
 readme = "README.md"
-license = { text = "MIT" }
+license = "MIT"
 requires-python = ">=3.8"
-
-# Optional dependencies if needed
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/yourusername/pytr"
+Homepage = "https://github.com/SoerenFox/pytr-Modified-"
+
+[tool.setuptools]
+packages = ["pytr"]
+include-package-data = true
