@@ -20,3 +20,4 @@ Homepage = "https://github.com/SoerenFox/pytr-Modified-"
 [tool.setuptools]
 packages = ["pytr"]
 include-package-data = true
+  
