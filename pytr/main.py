@@ -17,6 +17,7 @@ from pytr.details import Details
 from pytr.dl import DL
 from pytr.event import Event
 from pytr.portfolio import Portfolio
+from pytr.stoploss import StopLossUpdater
 from pytr.transactions import SUPPORTED_LANGUAGES, TransactionExporter
 from pytr.utils import check_version, get_logger
 
@@ -333,6 +334,22 @@ def get_main_parser():
     parser_price_for_order.add_argument("exchange", help="Exchange id")
     parser_price_for_order.add_argument("order_type", help="Order type (buy/sell)")
 
+    # automated stop order
+    info = "Update all stop-loss orders to by default 5%% below current market price"
+    parser_stoploss_update = parser_cmd.add_parser(
+        "update_stoploss",
+        formatter_class=formatter,
+        parents=[parser_login_args],
+        help=info,
+        description=info,
+    )
+    parser_stoploss_update.add_argument(
+        "--percent",
+        help="Percentage below market price for stop loss (default: 5%)",
+        type=float,
+        default=5.0,
+    )
+
     # Limit order
     parser_limit_order = parser_cmd.add_parser(
         "limit_order",
@@ -381,7 +398,6 @@ def get_main_parser():
         description="Cancel an existing order by id",
     )
     parser_cancel_order.add_argument("order_id", help="Order id to cancel")
-
     
     # get_price_alarms
     info = "Get current price alarms"
@@ -643,6 +659,20 @@ def main():
             tr = login(phone_no=args.phone_no, pin=args.pin, web=not args.applogin, store_credentials=args.store_credentials)
             res = tr.blocking_price_for_order(args.isin, args.exchange, args.order_type)
             print(json.dumps(res, indent=2, ensure_ascii=False))
+        except ValueError as e:
+            print(e)
+            return -1
+    elif args.command == "update_stoploss":
+        try:
+            tr = login(
+                phone_no=args.phone_no,
+                pin=args.pin,
+                web=not args.applogin,
+                store_credentials=args.store_credentials,
+            )
+            from pytr.stoploss import StopLossUpdater
+            updater = StopLossUpdater(tr)
+            updater.update(percent_diff=args.percent / 100)
         except ValueError as e:
             print(e)
             return -1
