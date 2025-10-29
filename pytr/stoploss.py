@@ -1,4 +1,3 @@
-import json
 from pytr.portfolio import Portfolio
 from pytr.utils import get_logger
 
@@ -21,7 +20,7 @@ class StopLossUpdater:
         self.log.info(f"Deleted {deleted} old stop-market orders.")
 
         # Renew stop losses for each portfolio position
-        p = Portfolio(self.tr).portfolioDate()
+        p = Portfolio(self.tr).portfolioData()
         created = 0
         for pos in p:
             amount = int(float(pos["netSize"]))
