@@ -335,7 +335,7 @@ def get_main_parser():
     parser_price_for_order.add_argument("order_type", help="Order type (buy/sell)")
 
     # automated stop order
-    info = "Update all stop-loss orders to by default 5%% below current market price"
+    info = "Update all stop-loss orders to by default 5 percent below current market price"
     parser_stoploss_update = parser_cmd.add_parser(
         "update_stoploss",
         formatter_class=formatter,
@@ -345,7 +345,7 @@ def get_main_parser():
     )
     parser_stoploss_update.add_argument(
         "--percent",
-        help="Percentage below market price for stop loss (default: 5%)",
+        help="Percentage below market price for stop loss (default: 5%%)",
         type=float,
         default=5.0,
     )
