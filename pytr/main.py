@@ -81,7 +81,7 @@ def get_main_parser():
         "--store_credentials",
         help="Store credentials (Phone number, pin, cookies) for next usage",
         action="store_true",
-        default=False,
+        default=True,
     )
 
     # parent subparser for lang option
@@ -345,7 +345,7 @@ def get_main_parser():
     )
     parser_stoploss_update.add_argument(
         "--percent",
-        help="Percentage below market price for stop loss (default: 5%%)",
+        help="Percentage below market price for stop loss",
         type=float,
         default=5.0,
     )
