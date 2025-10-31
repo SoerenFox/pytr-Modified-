@@ -6,7 +6,7 @@ class StopLossUpdater:
         self.tr = tr
         self.log = get_logger(__name__)
 
-    def update(self, percent_diff = 0.05):
+    def update(self, percent_diff, expiry, expiry_date):
         """Delete existing stop losses and create new ones by default 5% below current prices."""
         self.log.info("Fetching existing stop-market sell orders...")
         orders = self.tr.blocking_order_overview().get("orders", [])
@@ -35,7 +35,8 @@ class StopLossUpdater:
                 "sell",
                 amount,
                 price,
-                "gfd",
+                expiry,
+                expiry_date
             )
             created += 1
             self.log.info(f"Set stop loss for {pos['name']} ({pos['instrumentId']}): {amount} @ {price}")

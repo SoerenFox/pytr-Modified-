@@ -349,6 +349,17 @@ def get_main_parser():
         type=float,
         default=5.0,
     )
+    parser_stoploss_update.add_argument(
+        "--expiry",
+        help="Expiry type (gfd/gtd)",
+        default="gfd",
+    )
+    parser_stoploss_update.add_argument(
+        "--expiry-date",
+        help="Expiry date for gtd (YYYY-MM-DD)",
+        default=None,
+    )
+
 
     # Limit order
     parser_limit_order = parser_cmd.add_parser(
@@ -365,7 +376,7 @@ def get_main_parser():
     parser_limit_order.add_argument("limit", help="Limit price", type=float)
     parser_limit_order.add_argument(
         "--expiry",
-        help="Expiry type (e.g. gtc, gfd, gtd)",
+        help="Expiry type (gfd/gtd)",
         default="gfd",
     )
     parser_limit_order.add_argument(
@@ -672,7 +683,7 @@ def main():
             )
             from pytr.stoploss import StopLossUpdater
             updater = StopLossUpdater(tr)
-            updater.update(percent_diff=args.percent / 100)
+            updater.update(percent_diff=args.percent / 100, expiry=args.expiry, expiry_date=args.expiry_date)
         except ValueError as e:
             print(e)
             return -1
