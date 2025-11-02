@@ -1,5 +1,7 @@
 from pytr.portfolio import Portfolio
 from pytr.utils import get_logger
+from holidays import Germany
+from datetime import date
 
 class StopLossUpdater:
     def __init__(self, tr):
@@ -8,6 +10,12 @@ class StopLossUpdater:
 
     def update(self, percent_diff, expiry, expiry_date):
         """Delete existing stop losses and create new ones by default 5% below current prices."""
+        today = date.today()
+        holidays = Germany(years=today.year, prov="BW")
+        if today.weekday() >= 5 or today in holidays:
+            self.log.info("Today is a holiday (BW Germany) and therefore no orders can be set.")
+            return
+        
         self.log.info("Fetching existing stop-market sell orders...")
         orders = self.tr.blocking_order_overview().get("orders", [])
         deleted = 0
