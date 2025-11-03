@@ -18,6 +18,7 @@ from pytr.dl import DL
 from pytr.event import Event
 from pytr.portfolio import Portfolio
 from pytr.stoploss import StopLossUpdater
+from pytr.orderOverview import OrderOverview
 from pytr.transactions import SUPPORTED_LANGUAGES, TransactionExporter
 from pytr.utils import check_version, get_logger
 
@@ -659,9 +660,14 @@ def main():
             return -1
     elif args.command == "order_overview":
         try:
-            tr = login(phone_no=args.phone_no, pin=args.pin, web=not args.applogin, store_credentials=args.store_credentials)
-            res = tr.blocking_order_overview()
-            print(json.dumps(res, indent=2, ensure_ascii=False))
+            OrderOverview(
+                login(
+                    phone_no=args.phone_no,
+                    pin=args.pin,
+                    web=not args.applogin,
+                    store_credentials=args.store_credentials,
+                )
+            ).get()
         except ValueError as e:
             print(e)
             return -1
@@ -675,15 +681,14 @@ def main():
             return -1
     elif args.command == "update_stoploss":
         try:
-            tr = login(
-                phone_no=args.phone_no,
-                pin=args.pin,
-                web=not args.applogin,
-                store_credentials=args.store_credentials,
-            )
-            from pytr.stoploss import StopLossUpdater
-            updater = StopLossUpdater(tr)
-            updater.update(percent_diff=args.percent / 100, expiry=args.expiry, expiry_date=args.expiry_date)
+            StopLossUpdater(
+                login(
+                    phone_no=args.phone_no,
+                    pin=args.pin,
+                    web=not args.applogin,
+                    store_credentials=args.store_credentials,
+                )
+            ).update(percent_diff=args.percent / 100, expiry=args.expiry, expiry_date=args.expiry_date)
         except ValueError as e:
             print(e)
             return -1
