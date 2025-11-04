@@ -35,7 +35,9 @@ dependencies = [
     "requests_futures",
     "shtab",
     "websockets>=14",
-    "holidays"
+    "holidays",
+    "datetime",
+    "time"
 ]
 
 [project.scripts]
