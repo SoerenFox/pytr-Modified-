@@ -35,8 +35,7 @@ dependencies = [
     "shtab",
     "websockets>=14",
     "holidays",
-    "datetime",
-    "time"
+    "datetime"
 ]
 
 [project.scripts]
