@@ -402,6 +402,16 @@ def get_main_parser():
     )
     parser_news.add_argument("isin", help="ISIN of instrument")
 
+    # Portfolio news
+    info = "Show news for all portfolio instruments"
+    parser_news = parser_cmd.add_parser(
+        "portfolio_news",
+        formatter_class=formatter,
+        parents=[parser_login_args],
+        help=info,
+        description=info,
+    )
+
     # Cancel order
     parser_cancel_order = parser_cmd.add_parser(
         "cancel_order",
@@ -729,6 +739,19 @@ def main():
                     store_credentials=args.store_credentials,
                 )
             ).get(args.isin)
+        except ValueError as e:
+            print(e)
+            return -1
+    elif args.command == "portfolio_news":
+        try:
+            News(
+                login(
+                    phone_no=args.phone_no,
+                    pin=args.pin,
+                    web=not args.applogin,
+                    store_credentials=args.store_credentials,
+                )
+            ).getForPortfolio()
         except ValueError as e:
             print(e)
             return -1

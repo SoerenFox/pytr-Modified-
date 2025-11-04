@@ -1,5 +1,7 @@
-from datetime import date
+from time import time
+from datetime import date, timedelta
 from pytr.utils import get_logger
+from pytr.portfolio import Portfolio
 
 class News:
     def __init__(self, tr):
@@ -18,4 +20,24 @@ class News:
             print("ID:\t\t", article["id"])
             print()
 
-    
+    def getForPortfolio(self):
+        "Display recent headlines for all portfolio instruments"
+        self.log.info("Fetching portfolio data...")
+        p = Portfolio(self.tr).portfolioData()
+
+        self.log.info(f"Fetching {len(p)} instrument news...")
+        for pos in p:
+            news = self.tr.blocking_news(pos["instrumentId"])
+            if not news:
+                continue
+            sent = False
+            for article in news:
+                if (int(time()) - article["createdAt"] / 1000 > timedelta(days=14).total_seconds()):
+                    continue
+                if not sent:
+                    print(f"News for {pos["name"]}.")
+                    sent = True
+                print("\tHeadline:\t", article["headline"])
+                print("\tPublication:\t", date.fromtimestamp(article["createdAt"] / 1000).strftime("%A, %d. %B %Y"))
+                print("\tURL:\t\t", article["url"])
+                print()
