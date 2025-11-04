@@ -28,7 +28,7 @@ class StopLossUpdater:
         self.log.info(f"Deleted {deleted} old stop-market orders.")
 
         # Renew stop losses for each portfolio position
-        p = Portfolio(self.tr).portfolioData()
+        p = Portfolio(self.tr).portfolio_data()
         created = 0
         for pos in p:
             amount = int(float(pos["netSize"]))

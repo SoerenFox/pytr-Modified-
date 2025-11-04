@@ -128,6 +128,6 @@ class Portfolio:
 
         self.overview()
 
-    def portfolioData(self):
+    def portfolio_data(self):
         asyncio.get_event_loop().run_until_complete(self.portfolio_loop())
         return self.portfolio["positions"]

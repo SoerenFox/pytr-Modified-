@@ -751,7 +751,7 @@ def main():
                     web=not args.applogin,
                     store_credentials=args.store_credentials,
                 )
-            ).getForPortfolio()
+            ).get_for_portfolio()
         except ValueError as e:
             print(e)
             return -1

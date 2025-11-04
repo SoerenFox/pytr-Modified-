@@ -20,10 +20,10 @@ class News:
             print("ID:\t\t", article["id"])
             print()
 
-    def getForPortfolio(self):
+    def get_for_portfolio(self):
         "Display recent headlines for all portfolio instruments"
         self.log.info("Fetching portfolio data...")
-        p = Portfolio(self.tr).portfolioData()
+        p = Portfolio(self.tr).portfolio_data()
 
         self.log.info(f"Fetching {len(p)} instrument news...")
         for pos in p:
