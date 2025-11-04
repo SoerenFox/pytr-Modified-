@@ -19,6 +19,7 @@ from pytr.event import Event
 from pytr.portfolio import Portfolio
 from pytr.stoploss import StopLossUpdater
 from pytr.orderOverview import OrderOverview
+from pytr.news import News
 from pytr.transactions import SUPPORTED_LANGUAGES, TransactionExporter
 from pytr.utils import check_version, get_logger
 
@@ -720,9 +721,14 @@ def main():
             return -1
     elif args.command == "news":
         try:
-            tr = login(phone_no=args.phone_no, pin=args.pin, web=not args.applogin, store_credentials=args.store_credentials)
-            res = tr.blocking_news(args.isin)
-            print(json.dumps(res, indent=2, ensure_ascii=False))
+            News(
+                login(
+                    phone_no=args.phone_no,
+                    pin=args.pin,
+                    web=not args.applogin,
+                    store_credentials=args.store_credentials,
+                )
+            ).get(args.isin)
         except ValueError as e:
             print(e)
             return -1
