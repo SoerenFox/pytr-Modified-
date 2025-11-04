@@ -3,8 +3,7 @@
 This is a very slightly reengineered version of the [pytr](https://github.com/pytr-org/pytr) API with added functions and improved modules.
 
 > **Disclaimer:**  
-> This is an unofficial and reverse-engineered client for Trade Republic, provided for educational and research purposes only.  
-> It is **not affiliated with or endorsed by Trade Republic**.
+> This is an unofficial and reverse-engineered client for Trade Republic, provided for educational and research purposes only. It is not affiliated with or endorsed by Trade Republic.
 
 ## Installation
 
